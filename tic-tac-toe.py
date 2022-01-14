@@ -8,6 +8,7 @@ CSE 210 week 2
 Author: Andruw Sorensen
 """
 
+from operator import ne
 import random    
 
 
@@ -22,12 +23,20 @@ def main():
         show_board(board)
         user_choice(board, player)
         player = next_player(player)
-    print("Good Game! Thanks for playing!")
+    if has_winner(board):
+        player = next_player(player)
+        print(f"{player.upper()} Wins! Good Game! Thanks for playing!")
+    else:
+        print("It was a draw, good game! Thanks for playing!")
 
 def user_choice(board, player):
     choice = input(f"{player.upper()}'s turn - Choose a square (1-9): ")
-    choice = int(choice)
-    board[choice-1] = player.upper()
+    index = int(choice) - 1
+    if board[index] == "O" or board[index] == "X":
+        print("That space is already taken, please try again")
+        user_choice(board, player)
+    else:
+        board[index] = player.upper()
 
 def next_player(player):
     if player == "x":
@@ -74,8 +83,8 @@ def has_winner(board):
 
 def has_draw(board):
     for square in range(9):
-    if board[square] != "x" and board[square] != "o":
-        return False
+        if board[square] != "X" and board[square] != "O":
+            return False
     return True 
 
 main()
